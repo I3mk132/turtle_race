@@ -1,9 +1,16 @@
 # import library
 import turtle
 import time
+import random
 
 # window size
-WIDTH, HEIGHT = 500, 500
+WIDTH, HEIGHT = 500, 800
+COLORS = [
+    'red', 'green', 'blue',
+    'cyan', 'yellow', 'pink',
+    'purple', 'orange', 'black',
+    'gray'
+]
 
 
 # set amount of turtles
@@ -29,20 +36,40 @@ def init_turtle():
     screen.title("Turtle Race")
 
 
+def race(colors):
+    turtles = creating_turtles(colors)
+    while True:
+        for racer in turtles:
+            distance = random.randrange(1, 20)
+            racer.forward(distance)
+
+            x, y = racer.pos()
+            if y >= HEIGHT // 2-10 :
+                return colors[turtles.index(racer)]
+
+
+
+def creating_turtles(colors):
+    turtles = []
+    spacing_x = WIDTH // (len(colors)+1)
+    for i, color in enumerate(colors):
+        racer = turtle.Turtle()
+        racer.color(color)
+        racer.shape('turtle')
+        racer.left(90)
+        racer.penup()
+        racer.setpos(-WIDTH//2 + (i+1) * spacing_x, -HEIGHT//2 + 20)
+        racer.pendown()
+        turtles.append(racer)
+
+    return turtles
+
+
 Racers = get_number_of_racers()
 init_turtle()
 
-racer = turtle.Turtle()
-racer.shape("turtle")
-racer.color("blue")
-racer.speed(1)
-racer.penup()
+random.shuffle(COLORS)
+colors = COLORS[:Racers]
 
-racer.forward(100)
-racer.right(90)
-racer.forward(100)
-racer.right(45)
-racer.backward(100)
-racer.left(90)
-racer.forward(100)
-time.sleep(5)
+winner = race(colors)
+print(f'the winner is {winner} turtle!!!')
